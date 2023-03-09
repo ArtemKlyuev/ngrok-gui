@@ -1,5 +1,4 @@
 import { app, BrowserWindow, dialog, ipcMain } from 'electron';
-// import ngrok from 'ngrok';
 
 import { platform } from '../utils';
 
@@ -25,20 +24,18 @@ async function handleFileOpen(): Promise<string | null> {
 }
 
 async function handleNgrokStartTunnel(
-  event,
-  { binPath, port: addr, proto, auth: { login, password } = {} }: NgrokOptions,
+  eventMeta: any,
+  options: NgrokOptions,
 ): Promise<string | null> {
-  const auth = login ? `${login}:${password}` : undefined;
-
   try {
     console.log('trying to start');
-    const ngrok = new Ngrok(binPath);
-    const url = await ngrok.startProcess();
+    const res = await Ngrok.startTunnel(options);
 
-    console.log('MAIN: successfully started', url);
-    return url;
+    console.log('MAIN: successfully started', res.data);
+    return JSON.stringify(res.data);
   } catch (error) {
     console.log('MAIN error: ', error);
+    return null;
   }
 }
 

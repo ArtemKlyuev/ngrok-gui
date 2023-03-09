@@ -8,6 +8,7 @@ import { RENDERER } from '../constants/common';
 
 declare global {
   interface NgrokOptions {
+    name: string;
     proto: Ngrok.Protocol;
     port: number;
     binPath: string;
@@ -32,7 +33,7 @@ const preloaded = new Map<MapKeys, string[] | null>(Object.entries(DEFAULT_DATA)
 
 const api = {
   openFile: (): Promise<string | undefined> => ipcRenderer.invoke(APP_EVENTS.IPC.OPEN_FILE),
-  startTunnel: (options: NgrokOptions) =>
+  startTunnel: (options: NgrokOptions): Promise<string | null> =>
     ipcRenderer.invoke(APP_EVENTS.IPC.START_NGROK_TUNNEL, options),
 } as const;
 

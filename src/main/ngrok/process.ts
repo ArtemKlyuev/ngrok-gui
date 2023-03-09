@@ -6,9 +6,9 @@ type Reject = (reason?: any) => void;
 const READY_REG_EXP = /starting web service.*addr=(\d+\.\d+\.\d+\.\d+:\d+)/;
 const IN_USE_REG_EXP = /address already in use/;
 
-let activeProcess: Ngrok | null = null;
+let activeProcess: NgrokProcess | null = null;
 
-export class Ngrok {
+export class NgrokProcess {
   #spawnedProcess: ChildProcessWithoutNullStreams | null = null;
   #binPath!: string;
   #url: string | null = null;
@@ -83,7 +83,7 @@ export class Ngrok {
     try {
       const url = await apiURL;
       this.#url = url;
-      return this.url;
+      return url;
     } catch (error) {
       console.log('Error while trying to start process');
       this.#spawnedProcess.kill();
