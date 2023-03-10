@@ -13,7 +13,7 @@ export const Radio = forwardRef<HTMLInputElement, Props>(({ label, ...props }, r
   return (
     <div className="form-control">
       <label className="label justify-start gap-[15px] cursor-pointer">
-        <input ref={ref} type="radio" className="radio radio-sm radio-accent" {...props} />
+        <input ref={ref} type="radio" className="radio radio-xs radio-accent" {...props} />
         <span className="label-text">{label}</span>
       </label>
     </div>
