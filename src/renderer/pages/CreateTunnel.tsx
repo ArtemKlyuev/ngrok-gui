@@ -6,7 +6,7 @@ import { Radio } from '../components';
 
 const NgrokPaths = ({ ngrokPath }: { ngrokPath: string[] }): React.ReactElement => {
   return (
-    <ul>
+    <ul className="pl-5">
       {ngrokPath!.map((path) => {
         return (
           <li key={path}>
@@ -77,7 +77,7 @@ export const CreateTunnel = (): React.ReactElement => {
         )}
       </section>
       <section className="form-control">
-        <Radio name="choose_path" label="Выбрать бинарник" />
+        {hasNgrokPath && <Radio name="choose_path" label="Выбрать бинарник" />}
         <label className="label">
           <span className="label-text">Путь до бинарника</span>
         </label>
@@ -100,13 +100,6 @@ export const CreateTunnel = (): React.ReactElement => {
       Имя:
       <br />
       <input type="text" value={crypto.randomUUID()} className="input input-sm input-bordered" />
-      <br />
-      Протокол:
-      <br />
-      <select className="select select-sm select-bordered">
-        <option selected>http</option>
-        <option>https</option>
-      </select>
       <br />
       Порт:
       <br />
