@@ -1,16 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { RENDERER } from '../../constants/common';
-
+import { useExposedAPI } from '../hooks';
 import { Radio } from '../components';
 
-const exposedAPI = window[RENDERER.EXPOSED_API.NAME];
-
-const ngrokPath = exposedAPI?.preloaded.get('ngrokPath');
-const hasNgrokPath = Boolean(ngrokPath);
-
-const NgrokPaths = (): React.ReactElement => {
+const NgrokPaths = ({ ngrokPath }: { ngrokPath: string[] }): React.ReactElement => {
   return (
     <ul>
       {ngrokPath!.map((path) => {
@@ -28,7 +22,11 @@ let DATA = null;
 
 export const CreateTunnel = (): React.ReactElement => {
   const [filePath, setFilePath] = useState('');
+  const exposedAPI = useExposedAPI();
   const navigate = useNavigate();
+
+  const ngrokPath = exposedAPI?.preloaded.get('ngrokPath');
+  const hasNgrokPath = Boolean(ngrokPath);
 
   const openTunnelPage = (data: any): void => {
     navigate('tunnel', { state: data });
@@ -53,7 +51,7 @@ export const CreateTunnel = (): React.ReactElement => {
       });
 
       if (!stringifiedData) {
-        return console.log('No url!');
+        return console.log('No url!', stringifiedData);
       }
 
       const data = JSON.parse(stringifiedData);
@@ -69,8 +67,14 @@ export const CreateTunnel = (): React.ReactElement => {
       <h2 className="text-2xl font-bold underline">Выбор бинарника</h2>
       <br />
       <section className="form-control">
-        <Radio name="choose_path" label="Использовать один из найденных путей:" />
-        {hasNgrokPath ? <NgrokPaths /> : 'Нет путей'}
+        {hasNgrokPath ? (
+          <>
+            <Radio name="choose_path" label="Использовать один из найденных путей:" />
+            <NgrokPaths ngrokPath={ngrokPath!} />
+          </>
+        ) : (
+          'Не удалось автоматически найти исполняемый файл ngrok на вашем компьютере, выберите файл вручную'
+        )}
       </section>
       <section className="form-control">
         <Radio name="choose_path" label="Выбрать бинарник" />
