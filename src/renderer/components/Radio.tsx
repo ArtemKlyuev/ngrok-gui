@@ -3,6 +3,7 @@ import { ChangeEvent, forwardRef } from 'react';
 interface Props {
   checked?: boolean;
   value?: string;
+  disabled?: boolean;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   id?: string;
   name?: string;
