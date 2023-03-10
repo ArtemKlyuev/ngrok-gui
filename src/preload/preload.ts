@@ -40,7 +40,7 @@ const api = {
 const EXPOSED_API = { api, preloaded } as const;
 
 const eventsPromise = new Promise<string[] | null>((resolve) => {
-  ipcRenderer.on(APP_EVENTS.IPC.LOADED, (eventMeta, ngrokPath: string[] | null) => {
+  ipcRenderer.on(APP_EVENTS.IPC.SHELL_NGROK_PATH, (eventMeta, ngrokPath: string[] | null) => {
     resolve(ngrokPath);
   });
 });

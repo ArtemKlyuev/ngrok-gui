@@ -55,7 +55,7 @@ const createWindow = async (): Promise<void> => {
 
   const ngrokPath = await getNgrokPath();
 
-  mainWindow.webContents.send(APP_EVENTS.IPC.LOADED, ngrokPath);
+  mainWindow.webContents.send(APP_EVENTS.IPC.SHELL_NGROK_PATH, ngrokPath);
 
   // Load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
