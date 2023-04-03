@@ -2383,10 +2383,10 @@ electron-installer-redhat@^3.2.0:
     word-wrap "^1.2.3"
     yargs "^16.0.2"
 
-electron-log@5.0.0-beta.19:
-  version "5.0.0-beta.19"
-  resolved "https://registry.yarnpkg.com/electron-log/-/electron-log-5.0.0-beta.19.tgz#15e5cbba1a775c86d4aae75f571f6e3975278d93"
-  integrity sha512-BN/0fDaSw3jpa3BXFQ2kASGmY1Vl4TShdBdozx75GB5MuTlDLMOZ15lfA9Aq592TXS88hC+jUeWqkmTgAH7irQ==
+electron-log@5.0.0-beta.21:
+  version "5.0.0-beta.21"
+  resolved "https://registry.yarnpkg.com/electron-log/-/electron-log-5.0.0-beta.21.tgz#5135749b87628d016c55fb0dece6318e15e967ef"
+  integrity sha512-ljN850n6syNz+eNPj83QuGKmgG/HKHAMVfvB/46D9GBPa1REwN7ALbqvaQsy094wP8xH17ga5k7PSYWi/eE+uQ==
 
 electron-packager@^17.1.1:
   version "17.1.1"
