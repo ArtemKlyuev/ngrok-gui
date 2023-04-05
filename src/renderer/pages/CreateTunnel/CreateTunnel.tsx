@@ -5,24 +5,43 @@ import { DevTool } from '@hookform/devtools';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
-import { useExposedAPI } from '../hooks';
-import { Radio } from '../components';
+import { useExposedAPI } from '../../hooks';
+import { Radio } from '../../components';
 
 type Inputs = {
-  choose_path: string;
+  choose_path: typeof PREDEFINED | typeof MANUAL;
   path: string;
   manual_path: string;
   name: string;
   port: number;
+  auth?: {
+    login: string;
+    password: string;
+  };
 };
 
-const schema = z.object({
-  choose_path: z.boolean().optional(),
+const PREDEFINED = 'predefined';
+const MANUAL = 'manual';
+
+const schema2 = z.object({
+  choose_path: z.enum([PREDEFINED, MANUAL]).optional(),
   path: z.string(),
   manual_path: z.string(),
   name: z.string().nonempty().or(z.number()),
   port: z.number().positive(),
+  auth: z.object({ login: z.string(), password: z.string() }).optional(),
 });
+
+const schema = z
+  .object({
+    choose_path: z.enum([PREDEFINED, MANUAL]),
+    path: z.string(),
+    manual_path: z.string().optional(),
+    name: z.string().nonempty().or(z.number()),
+    port: z.number().positive(),
+    auth: z.object({ login: z.string(), password: z.string() }).optional(),
+  })
+  .or(schema2);
 
 const [randomName] = crypto.randomUUID().split('-');
 
@@ -42,7 +61,7 @@ export const CreateTunnel = (): React.ReactElement => {
   } = useForm<Inputs>({
     resolver: zodResolver(schema),
     defaultValues: {
-      choose_path: hasNgrokPath ? 'predefined' : 'manual',
+      choose_path: hasNgrokPath ? PREDEFINED : MANUAL,
       path: hasNgrokPath ? ngrokPath![0] : undefined,
       name: randomName,
     },
@@ -50,8 +69,8 @@ export const CreateTunnel = (): React.ReactElement => {
   const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
 
   const pathType = watch('choose_path');
-  const isPredefinied = pathType === 'predefined';
-  const isManual = pathType === 'manual';
+  const isPredefinied = pathType === PREDEFINED;
+  const isManual = pathType === MANUAL;
 
   const openTunnelPage = (data: any): void => {
     navigate('tunnel', { state: data });
@@ -93,7 +112,7 @@ export const CreateTunnel = (): React.ReactElement => {
             <>
               <Radio
                 {...register('choose_path')}
-                value={'predefined'}
+                value={PREDEFINED}
                 label="Использовать один из найденных путей:"
               />
               <ul className="pl-5">
@@ -161,7 +180,10 @@ export const CreateTunnel = (): React.ReactElement => {
         </div>
         <br />
         <br />
-        <button type="submit" onClick={handleStartTunnel} className="btn btn-sm">
+        {/* <button type="submit" onClick={handleStartTunnel} className="btn btn-sm">
+          Start tunnel
+        </button> */}
+        <button type="submit" className="btn btn-sm">
           Start tunnel
         </button>
         {/* <button onClick={() => openTunnelPage(DATA)} className="btn btn-sm">
