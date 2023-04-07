@@ -6,42 +6,57 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
 import { useExposedAPI } from '../../hooks';
-import { Radio } from '../../components';
+import { FieldError, Radio } from '../../components';
 
 type Inputs = {
-  choose_path: typeof PREDEFINED | typeof MANUAL;
-  path: string;
-  manual_path: string;
-  name: string;
-  port: number;
-  auth?: {
-    login: string;
-    password: string;
-  };
+  [FIELDS.PATH_TYPE]: typeof PREDEFINED | typeof MANUAL;
+  [FIELDS.PREDEFINED_PATH]: string;
+  [FIELDS.MANUAL_PATH]: string;
+  [FIELDS.NAME]: string;
+  [FIELDS.PORT]: number;
+  [FIELDS.AUTH]: boolean;
+  [FIELDS.LOGIN]?: string;
+  [FIELDS.PASSWORD]?: string;
 };
 
 const PREDEFINED = 'predefined';
 const MANUAL = 'manual';
 
-const schema2 = z.object({
-  choose_path: z.enum([PREDEFINED, MANUAL]).optional(),
-  path: z.string(),
-  manual_path: z.string(),
-  name: z.string().nonempty().or(z.number()),
-  port: z.number().positive(),
-  auth: z.object({ login: z.string(), password: z.string() }).optional(),
-});
+const FIELDS = {
+  PATH_TYPE: 'path_type',
+  MANUAL_PATH: 'manual_path',
+  PREDEFINED_PATH: 'predefined_path',
+  NAME: 'name',
+  PORT: 'port',
+  AUTH: 'auth',
+  LOGIN: 'login',
+  PASSWORD: 'password',
+} as const;
 
 const schema = z
   .object({
-    choose_path: z.enum([PREDEFINED, MANUAL]),
-    path: z.string(),
-    manual_path: z.string().optional(),
-    name: z.string().nonempty().or(z.number()),
-    port: z.number().positive(),
-    auth: z.object({ login: z.string(), password: z.string() }).optional(),
+    [FIELDS.PATH_TYPE]: z.enum([PREDEFINED, MANUAL]),
+    [FIELDS.PREDEFINED_PATH]: z.string().trim().min(1).optional(),
+    [FIELDS.MANUAL_PATH]: z.string().trim().min(1, { message: 'Path required!' }).optional(),
+    [FIELDS.NAME]: z.string().trim().nonempty({ message: `Name required!` }),
+    [FIELDS.PORT]: z.coerce.number().positive({ message: 'Port number must be greater than 0' }),
+    [FIELDS.AUTH]: z.boolean(),
+    [FIELDS.LOGIN]: z.string().trim().min(1, { message: 'Login required!' }).optional(),
+    [FIELDS.PASSWORD]: z.string().trim().min(1, { message: 'Password required!' }).optional(),
   })
-  .or(schema2);
+  .superRefine((values, ctx) => {
+    if (values[FIELDS.PATH_TYPE] === MANUAL && !values[FIELDS.MANUAL_PATH]) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: [FIELDS.MANUAL_PATH] });
+    }
+
+    if (values[FIELDS.AUTH] && !values[FIELDS.LOGIN]) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: [FIELDS.LOGIN] });
+    }
+
+    if (values[FIELDS.AUTH] && !values[FIELDS.PASSWORD]) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: [FIELDS.PASSWORD] });
+    }
+  });
 
 const [randomName] = crypto.randomUUID().split('-');
 
@@ -61,34 +76,16 @@ export const CreateTunnel = (): React.ReactElement => {
   } = useForm<Inputs>({
     resolver: zodResolver(schema),
     defaultValues: {
-      choose_path: hasNgrokPath ? PREDEFINED : MANUAL,
-      path: hasNgrokPath ? ngrokPath![0] : undefined,
-      name: randomName,
+      [FIELDS.PATH_TYPE]: hasNgrokPath ? PREDEFINED : MANUAL,
+      [FIELDS.PREDEFINED_PATH]: hasNgrokPath ? ngrokPath![0] : undefined,
+      [FIELDS.NAME]: randomName,
+      [FIELDS.AUTH]: false,
     },
   });
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
 
-  const pathType = watch('choose_path');
-  const isPredefinied = pathType === PREDEFINED;
-  const isManual = pathType === MANUAL;
-
-  const openTunnelPage = (data: any): void => {
-    navigate('tunnel', { state: data });
-  };
-
-  const handlOpenFile = async (): Promise<void> => {
-    const filePath = (await exposedAPI?.api.openFile()) ?? '';
-    setValue('manual_path', filePath);
-  };
-
-  const handleStartTunnel = async (): Promise<void> => {
+  const startTunnel = async (options: NgrokOptions): Promise<void> => {
     try {
-      const stringifiedData = await exposedAPI?.api.startTunnel({
-        name: 'frontend',
-        proto: 'http',
-        port: 4173,
-        binPath: '/opt/homebrew/bin/ngrok',
-      });
+      const stringifiedData = await exposedAPI?.api.startTunnel(options);
 
       if (!stringifiedData) {
         return console.log('No url!', stringifiedData);
@@ -96,22 +93,54 @@ export const CreateTunnel = (): React.ReactElement => {
 
       const data = JSON.parse(stringifiedData);
       console.log('tunnel started data ', data);
+      openTunnelPage(data);
     } catch (error) {
-      console.log('startTunnel error', error);
+      console.error('startTunnel error', error);
     }
+  };
+
+  const onSubmit: SubmitHandler<Inputs> = async (rawData) => {
+    const { name, port, login, password } = rawData;
+
+    const binPath =
+      rawData[FIELDS.PATH_TYPE] === PREDEFINED
+        ? rawData[FIELDS.PREDEFINED_PATH]
+        : rawData[FIELDS.MANUAL_PATH];
+
+    const auth = login && password ? { login, password } : undefined;
+
+    const options: NgrokOptions = { binPath, name, port, auth, proto: 'http' };
+
+    await startTunnel(options);
+  };
+
+  const pathType = watch(FIELDS.PATH_TYPE);
+  const isPredefinied = pathType === PREDEFINED;
+  const isManual = pathType === MANUAL;
+
+  const shouldUseAuth = watch(FIELDS.AUTH);
+
+  const openTunnelPage = (data: any): void => {
+    navigate('tunnel', { state: data });
+  };
+
+  const handlOpenFile = async (): Promise<void> => {
+    const filePath = (await exposedAPI?.api.openFile()) ?? '';
+    setValue(FIELDS.MANUAL_PATH, filePath);
   };
 
   return (
     <>
       {process.env.NODE_ENV === 'development' && <DevTool control={control} />}
-      <h2 className="text-2xl font-bold underline">Выбор бинарника</h2>
+      <h1 className="text-3xl font-bold underline">Создание туннеля</h1>
       <br />
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <section className="form-control">
+      <form autoComplete="off" onSubmit={handleSubmit(onSubmit)} className="grid gap-8">
+        <fieldset className="form-control">
+          <legend className="text-2xl font-bold mb-4">Выбор бинарника</legend>
           {hasNgrokPath ? (
             <>
               <Radio
-                {...register('choose_path')}
+                {...register(FIELDS.PATH_TYPE)}
                 value={PREDEFINED}
                 label="Использовать один из найденных путей:"
               />
@@ -119,7 +148,12 @@ export const CreateTunnel = (): React.ReactElement => {
                 {ngrokPath!.map((path) => {
                   return (
                     <li key={path}>
-                      <Radio {...register('path')} disabled={isManual} value={path} label={path} />
+                      <Radio
+                        {...register(FIELDS.PREDEFINED_PATH)}
+                        disabled={isManual}
+                        value={path}
+                        label={path}
+                      />
                     </li>
                   );
                 })}
@@ -128,67 +162,88 @@ export const CreateTunnel = (): React.ReactElement => {
           ) : (
             'Не удалось автоматически найти исполняемый файл ngrok на вашем компьютере, выберите файл вручную'
           )}
-        </section>
-        <section className="form-control">
-          {hasNgrokPath && (
-            <Radio {...register('choose_path')} value="manual" label="Выбрать бинарник" />
-          )}
-          <label className="label">
-            <span className="label-text">Путь до бинарника</span>
-          </label>
-          <div className="input-group">
+          <div className="form-control">
+            {hasNgrokPath && (
+              <Radio
+                {...register(FIELDS.PATH_TYPE)}
+                value="manual"
+                label="Выбрать бинарник вручную"
+              />
+            )}
+            {((hasNgrokPath && isManual) || !hasNgrokPath) && (
+              <div className="grid gap-[0.25rem]">
+                <label className="label-text">Путь до бинарника</label>
+                <div className="input-group">
+                  <input
+                    type="text"
+                    {...register(FIELDS.MANUAL_PATH)}
+                    disabled={isPredefinied}
+                    className="input input-sm w-full input-bordered"
+                  />
+                  <button
+                    type="button"
+                    onClick={handlOpenFile}
+                    disabled={isPredefinied}
+                    className="btn btn-sm"
+                  >
+                    Open file
+                  </button>
+                </div>
+                {errors.manual_path && <FieldError>{errors.manual_path.message}</FieldError>}
+              </div>
+            )}
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend className="text-2xl font-bold mb-4">Config</legend>
+          <div className="grid gap-[0.25rem]">
+            <label className="label-text">Name:</label>
             <input
               type="text"
-              {...register('manual_path')}
-              disabled={isPredefinied}
-              className="input input-sm w-full input-bordered"
+              {...register(FIELDS.NAME)}
+              className="input input-sm input-bordered"
             />
-            <button
-              type="button"
-              onClick={handlOpenFile}
-              disabled={isPredefinied}
-              className="btn btn-sm"
-            >
-              Open file
-            </button>
+            {errors.name && <FieldError>{errors.name.message}</FieldError>}
           </div>
-        </section>
-        <br />
-        <br />
-        <h2 className="text-2xl font-bold underline">Конфиг</h2>
-        <br />
-        Имя:
-        <br />
-        <input type="text" {...register('name')} className="input input-sm input-bordered" />
-        <br />
-        Порт:
-        <br />
-        <input type="number" {...register('port')} className="input input-sm input-bordered" />
-        <br />
-        Авторизация:
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">Логин</span>
+          <div className="grid gap-[0.25rem]">
+            <label className="label-text">Port:</label>
+            <input
+              type="text"
+              {...register(FIELDS.PORT)}
+              className="input input-sm input-bordered"
+            />
+            {errors.port && <FieldError>{errors.port.message}</FieldError>}
+          </div>
+          <label className="label justify-start gap-[5px] cursor-pointer">
+            <input {...register(FIELDS.AUTH)} type="checkbox" className="checkbox" />
+            <span className="label-text">Use auth</span>
           </label>
-          <input type="text" className="input input-sm w-full input-bordered" />
-        </div>
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">Пароль</span>
-          </label>
-          <input type="password" className="input input-sm w-full input-bordered" />
-        </div>
-        <br />
-        <br />
-        {/* <button type="submit" onClick={handleStartTunnel} className="btn btn-sm">
-          Start tunnel
-        </button> */}
+          {shouldUseAuth && (
+            <>
+              <div className="grid gap-[0.25rem]">
+                <label className="label-text">Login</label>
+                <input
+                  type="text"
+                  {...register(FIELDS.LOGIN)}
+                  className="input input-sm w-full input-bordered"
+                />
+                {errors.login && <FieldError>{errors.login.message}</FieldError>}
+              </div>
+              <div className="grid gap-[0.25rem]">
+                <label className="label-text">Password</label>
+                <input
+                  type="password"
+                  {...register(FIELDS.PASSWORD)}
+                  className="input input-sm w-full input-bordered"
+                />
+                {errors.password && <FieldError>{errors.password.message}</FieldError>}
+              </div>
+            </>
+          )}
+        </fieldset>
         <button type="submit" className="btn btn-sm">
           Start tunnel
         </button>
-        {/* <button onClick={() => openTunnelPage(DATA)} className="btn btn-sm">
-          Open tunnel page
-        </button> */}
       </form>
     </>
   );
