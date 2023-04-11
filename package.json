@@ -75,6 +75,6 @@
     "swc-loader": "0.2.3",
     "tailwindcss": "3.3.1",
     "ts-node": "10.9.1",
-    "typescript": "5.0.3"
+    "typescript": "5.0.4"
   }
 }
