@@ -1867,6 +1867,11 @@
   resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.5.0.tgz#57618e57942a5f0131374a9fdb0167e25a117fdc"
   integrity sha512-bkUDCp8o1MvFO+qxkODcbhSqRa6P2GXgrGZVpt0dCXNW2HCSCqYI0ZoAqEOSAjRWmmlKcYgFvN4B4S+zo/f8kg==
 
+"@ribpay/qr-code-generator@1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@ribpay/qr-code-generator/-/qr-code-generator-1.0.6.tgz#b0e5b43af9c1a1fe8fad8c089bdbd1af23e8db1f"
+  integrity sha512-Pucebv9RyNL2+xntvCJ7TQiWoC9hsEFkMlV0KMVnPXzKVn7mF3V+c/2A8L/iHm8QnZMtzQjb5cXJJdaigeoVjg==
+
 "@sinclair/typebox@^0.25.16":
   version "0.25.24"
   resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.25.24.tgz#8c7688559979f7079aacaf31aa881c3aa410b718"
