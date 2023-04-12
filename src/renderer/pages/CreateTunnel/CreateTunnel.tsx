@@ -44,7 +44,11 @@ const schema = z
     [FIELDS.PORT]: z.coerce.number().positive({ message: 'Port number must be greater than 0' }),
     [FIELDS.AUTH]: z.boolean(),
     [FIELDS.LOGIN]: z.string().trim().min(1, { message: 'Login required!' }).optional(),
-    [FIELDS.PASSWORD]: z.string().trim().min(1, { message: 'Password required!' }).optional(),
+    [FIELDS.PASSWORD]: z
+      .string()
+      .trim()
+      .min(8, { message: 'Password must be at least 8 characters' })
+      .optional(),
   })
   .superRefine((values, ctx) => {
     if (values[FIELDS.PATH_TYPE] === MANUAL && !values[FIELDS.MANUAL_PATH]) {
@@ -236,7 +240,11 @@ export const CreateTunnel = (): React.ReactElement => {
                 <label className="label-text">Password</label>
                 <input
                   type="password"
-                  {...register(FIELDS.PASSWORD)}
+                  {...register(FIELDS.PASSWORD, {
+                    onChange: (e) => {
+                      setValue(FIELDS.PASSWORD, e.target.value.trim());
+                    },
+                  })}
                   className="input input-sm w-full input-bordered"
                 />
                 {errors.password && <FieldError>{errors.password.message}</FieldError>}
