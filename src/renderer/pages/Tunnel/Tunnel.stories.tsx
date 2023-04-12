@@ -10,7 +10,7 @@ const meta: Meta<typeof Page> = {
   title: 'Pages/Tunnel',
   decorators: [withRouter, withExposedAPI],
   component: Page,
-  parameters: { api: { stopTunnel: action('startTunnel triggered') } },
+  parameters: { api: { stopTunnel: action('stopTunnel triggered') } },
 };
 
 export default meta;
