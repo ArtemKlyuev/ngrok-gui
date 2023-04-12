@@ -3,7 +3,7 @@ import { promisify } from 'node:util';
 import { AxiosResponse, isAxiosError } from 'axios';
 
 import { NgrokProcess } from './process';
-import { API, Options, Resp } from './api';
+import { API, Options, NgrokStartTunnelResponse } from './api';
 
 const sleep = promisify(setTimeout);
 
@@ -39,7 +39,9 @@ export class Ngrok {
     return this.#retryConnect({ name, addr, proto, basic_auth });
   }
 
-  static async #retryConnect(options: Options): Promise<AxiosResponse<Resp, any>> | never {
+  static async #retryConnect(
+    options: Options,
+  ): Promise<AxiosResponse<NgrokStartTunnelResponse, any>> | never {
     try {
       const response = await this.#api!.startTunnel(options);
       return response;

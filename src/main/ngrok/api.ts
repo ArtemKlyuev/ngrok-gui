@@ -5,11 +5,12 @@ export interface Options {
   name: string;
   proto: Ngrok.Protocol;
   addr: number;
-  basic_auth?: string | undefined;
+  basic_auth?: string[] | undefined;
 }
 
-export interface Resp {
+export interface NgrokStartTunnelResponse {
   name: string;
+  ID: string;
   /**
    * @example '/api/tunnels/'
    */
@@ -62,7 +63,7 @@ export class API {
   }
 
   startTunnel(options: Options) {
-    return this.#request.post<Resp>('/tunnels', options);
+    return this.#request.post<NgrokStartTunnelResponse>('/tunnels', options);
   }
 
   stopTunnel(name: string) {
