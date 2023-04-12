@@ -19,7 +19,7 @@ export const Tunnel = (): React.ReactElement => {
   const exposedAPI = useExposedAPI();
   const navigate = useNavigate();
 
-  const { name, publicURL, auth } = location.state;
+  const { name, publicURL, auth, inspectURL } = location.state;
 
   const URL = getURL(publicURL, auth);
   const handleStopTunnel = async (): Promise<void> => {

@@ -32,10 +32,10 @@ async function handleNgrokStartTunnel(
 ): Promise<string | null> {
   try {
     console.log('trying to start');
-    const res = await Ngrok.startTunnel(options);
+    const tunnelInfo = await Ngrok.startTunnel(options);
 
-    console.log('MAIN: successfully started', res.data);
-    return JSON.stringify(res.data);
+    console.log('MAIN: successfully started', tunnelInfo);
+    return JSON.stringify(tunnelInfo);
   } catch (error) {
     console.log('MAIN error: ', error);
     return null;

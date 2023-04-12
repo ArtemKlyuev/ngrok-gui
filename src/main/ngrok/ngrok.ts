@@ -32,18 +32,21 @@ export class Ngrok {
     const basic_auth = this.#getAuth(auth);
 
     this.#process = new NgrokProcess(binPath);
-    const url = await this.#process.startProcess();
-    this.#api = new API(url);
+    const inspectURL = await this.#process.startProcess();
+    this.#api = new API(inspectURL);
 
-    return this.#retryConnect({ name, addr, proto, basic_auth });
+    return this.#retryConnect({ name, addr, proto, basic_auth, inspectURL });
   }
 
-  static async #retryConnect(
-    options: Options,
-  ): Promise<AxiosResponse<NgrokStartTunnelResponse, any>> | never {
+  static async #retryConnect({
+    inspectURL,
+    ...options
+  }: Options & { inspectURL: string }):
+    | Promise<NgrokStartTunnelResponse & { inspectURL: string }>
+    | never {
     try {
       const response = await this.#api!.startTunnel(options);
-      return response;
+      return { ...response.data, inspectURL };
     } catch (err) {
       if (!this.#isRetriable(err) || this.#connectionRetryCount >= MAX_CONNECTION_RESTRIES) {
         throw err;
@@ -55,7 +58,7 @@ export class Ngrok {
 
       console.log('Failed to connect. Connection retries: ', this.#connectionRetryCount);
 
-      return this.#retryConnect(options);
+      return this.#retryConnect({ ...options, inspectURL });
     }
   }
 

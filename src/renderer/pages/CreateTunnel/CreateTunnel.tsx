@@ -97,10 +97,12 @@ export const CreateTunnel = (): React.ReactElement => {
         return console.log('No url!', stringifiedData);
       }
 
-      const { name, public_url: publicURL } = JSON.parse(
-        stringifiedData,
-      ) as NgrokStartTunnelResponse;
-      openTunnelPage({ name, publicURL, auth: options.auth });
+      const {
+        name,
+        public_url: publicURL,
+        inspectURL,
+      } = JSON.parse(stringifiedData) as NgrokStartTunnelResponse & { inspectURL: string };
+      openTunnelPage({ name, publicURL, auth: options.auth, inspectURL });
     } catch (error) {
       console.error('startTunnel error', error);
     }
