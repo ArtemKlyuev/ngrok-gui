@@ -67,6 +67,6 @@ export class API {
   }
 
   stopTunnel(name: string) {
-    return this.#request.delete<void>('/tunnels', { params: name });
+    return this.#request.delete<void>(`/tunnels/${name}`);
   }
 }
