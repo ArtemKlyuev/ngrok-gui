@@ -4,18 +4,13 @@ import qrcodegen from '@ribpay/qr-code-generator';
 interface Props {
   text: string;
   innerPadding?: number;
-  size?: string;
 }
 
 const QRC = qrcodegen.QrCode;
 
 const DEFAULT_INNER_PADDING = 4;
 
-export const QRCode: FC<Props> = ({
-  text,
-  innerPadding = DEFAULT_INNER_PADDING,
-  size = '200px',
-}) => {
+export const QRCode: FC<Props> = ({ text, innerPadding = DEFAULT_INNER_PADDING }) => {
   const qr = useMemo(() => QRC.encodeText(text, QRC.Ecc.MEDIUM), [text]);
   const viewBoxSize = qr.size + innerPadding * 2;
 
@@ -42,7 +37,7 @@ export const QRCode: FC<Props> = ({
       xmlns="http://www.w3.org/2000/svg"
       viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`}
       stroke="none"
-      className={`w-[${size}]`}
+      className="w-[200px]"
     >
       <rect width="100%" height="100%" className="fill-[hsl(var(--nc))]" />
       <path d={parts} className="fill-[hsl(var(--n))]" />
