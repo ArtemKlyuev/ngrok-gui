@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useExposedAPI } from '../../hooks';
-import { QRCode } from '../../components';
+import { ExternalLink, QRCode } from '../../components';
 
 const getURL = (url: string, auth?: NgrokOptions['auth']): string => {
   if (!auth) {
@@ -30,14 +30,11 @@ export const Tunnel = (): React.ReactElement => {
   return (
     <>
       <h1 className="mb-6 text-3xl font-bold underline">Tunnels</h1>
+      <ExternalLink URL={inspectURL}>Inspect tunnels</ExternalLink>
       <section className="grid gap-[8px]">
         <p>Tunnel name: {name}</p>
         <p>
-          Open{' '}
-          <a href={URL} target="_blank" className="link">
-            URL
-          </a>{' '}
-          in browser
+          Open <ExternalLink URL={URL}>URL</ExternalLink> in browser
         </p>
         <p>Or scan QR code</p>
         <QRCode text={URL} />
