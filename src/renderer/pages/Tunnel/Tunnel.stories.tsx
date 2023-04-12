@@ -16,10 +16,27 @@ const meta: Meta<typeof Page> = {
 export default meta;
 type Story = StoryObj<typeof Page>;
 
-export const Tunnel: Story = {
+export const WithAuth: Story = {
   parameters: {
     reactRouter: {
-      routeState: { name: 'Tunnel', publicURL: 'https://google.com' },
+      routeState: {
+        name: 'Tunnel',
+        publicURL: 'https://google.com',
+        auth: { login: 'user', password: '12345678' },
+        inspectURL: 'https://google.com',
+      },
+    },
+  },
+};
+
+export const WithoutAuth: Story = {
+  parameters: {
+    reactRouter: {
+      routeState: {
+        name: 'Tunnel',
+        publicURL: 'https://google.com',
+        inspectURL: 'https://google.com',
+      },
     },
   },
 };
