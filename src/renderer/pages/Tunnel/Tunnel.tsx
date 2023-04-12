@@ -31,10 +31,15 @@ export const Tunnel = (): React.ReactElement => {
     <>
       <h1 className="mb-6 text-3xl font-bold underline">Tunnels</h1>
       <section className="grid gap-[8px]">
-        <p>Name: {name}</p>
-        <a href={URL} target="_blank" className="link">
-          URL
-        </a>
+        <p>Tunnel name: {name}</p>
+        <p>
+          Open{' '}
+          <a href={URL} target="_blank" className="link">
+            URL
+          </a>{' '}
+          in browser
+        </p>
+        <p>Or scan QR code</p>
         <QRCode text={URL} />
         <button type="button" onClick={handleStopTunnel} className="btn btn-sm">
           Stop tunnel
