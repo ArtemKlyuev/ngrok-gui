@@ -70,9 +70,7 @@ export class NgrokProcess {
 
   async startProcess() {
     const args = ['start', '--none', '--log=stdout'];
-    console.log('binPath', this.#binPath);
     this.#spawnedProcess = spawn(this.#binPath, args, { windowsHide: true });
-    // const ngrokProcess = spawn(this.#binPath, args, { windowsHide: true });
 
     const apiURL = new Promise<string>((resolve, reject) => {
       this.#spawnedProcess!.stdout.on('data', this.#dataListener(resolve, reject));

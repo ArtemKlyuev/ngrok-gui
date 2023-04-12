@@ -35,6 +35,8 @@ const api = {
   openFile: (): Promise<string | undefined> => ipcRenderer.invoke(APP_EVENTS.IPC.OPEN_FILE),
   startTunnel: (options: NgrokOptions): Promise<string | null> =>
     ipcRenderer.invoke(APP_EVENTS.IPC.START_NGROK_TUNNEL, options),
+  stopTunnel: (name: string): Promise<void> =>
+    ipcRenderer.invoke(APP_EVENTS.IPC.STOP_NGROK_TUNNEL, name),
 } as const;
 
 const EXPOSED_API = { api, preloaded } as const;

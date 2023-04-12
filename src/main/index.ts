@@ -43,6 +43,17 @@ async function handleNgrokStartTunnel(
   }
 }
 
+async function handleNgrokStopTunnel(eventMeta: any, name: string): Promise<void> {
+  try {
+    console.log('trying to stop', name);
+    const res = await Ngrok.stopTunnel(name);
+
+    console.log('MAIN: successfully stopped', res);
+  } catch (error) {
+    console.log('MAIN error: ', error);
+  }
+}
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
@@ -78,6 +89,7 @@ const createWindow = async (): Promise<void> => {
 app.whenReady().then(() => {
   ipcMain.handle(APP_EVENTS.IPC.OPEN_FILE, handleFileOpen);
   ipcMain.handle(APP_EVENTS.IPC.START_NGROK_TUNNEL, handleNgrokStartTunnel);
+  ipcMain.handle(APP_EVENTS.IPC.STOP_NGROK_TUNNEL, handleNgrokStopTunnel);
 
   createWindow();
 
