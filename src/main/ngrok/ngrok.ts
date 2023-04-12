@@ -19,17 +19,16 @@ export class Ngrok {
   static #api: API | null = null;
   static #connectionRetryCount = 0;
 
-  static #getAuth(auth: NgrokOptions['auth']): string | undefined {
+  static #getAuth(auth: NgrokOptions['auth']): string[] | undefined {
     if (!auth) {
       return;
     }
 
-    return `${auth.login}:${auth.password}`;
+    return [`${auth.login}:${auth.password}`];
   }
 
   static async startTunnel(options: NgrokOptions) {
     const { binPath, name, port: addr, proto, auth } = options;
-
     const basic_auth = this.#getAuth(auth);
 
     this.#process = new NgrokProcess(binPath);
