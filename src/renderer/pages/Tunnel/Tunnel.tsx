@@ -1,7 +1,9 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useExposedAPI } from '../../hooks';
-import { ExternalLink, QRCode } from '../../components';
+import { ExternalLink } from '../../components';
+
+import { TunnelCard } from './Card';
 
 const getURL = (url: string, auth?: NgrokOptions['auth']): string => {
   if (!auth) {
@@ -28,20 +30,20 @@ export const Tunnel = (): React.ReactElement => {
   };
 
   return (
-    <>
-      <h1 className="mb-6 text-3xl font-bold underline">Tunnels</h1>
+    <div className="grid gap-7">
+      <h1 className="text-3xl font-bold underline">Tunnels</h1>
       <ExternalLink URL={inspectURL}>Inspect tunnels</ExternalLink>
-      <section className="grid gap-[8px]">
-        <p>Tunnel name: {name}</p>
-        <p>
-          Open <ExternalLink URL={URL}>URL</ExternalLink> in browser
-        </p>
-        <p>Or scan QR code</p>
-        <QRCode text={URL} />
-        <button type="button" onClick={handleStopTunnel} className="btn btn-sm">
-          Stop tunnel
-        </button>
-      </section>
-    </>
+      <div>
+        <div className="tabs">
+          <button className="tab tab-lifted [--tab-border-color:transparent]">Tab 1</button>
+          <button className="tab tab-lifted tab-active [--tab-bg:hsl(var(--n))]">Tab 2</button>
+          <button className="tab tab-lifted">Tab 3</button>
+        </div>
+        <TunnelCard name={name} URL={URL} />
+      </div>
+      <button type="button" onClick={handleStopTunnel} className="btn btn-error">
+        Stop tunnel
+      </button>
+    </div>
   );
 };
