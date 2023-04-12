@@ -5,6 +5,8 @@ import { DevTool } from '@hookform/devtools';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
+import { NgrokStartTunnelResponse } from '../../../main/ngrok/api';
+
 import { useExposedAPI } from '../../hooks';
 import { FieldError, Radio } from '../../components';
 
@@ -91,9 +93,10 @@ export const CreateTunnel = (): React.ReactElement => {
         return console.log('No url!', stringifiedData);
       }
 
-      const data = JSON.parse(stringifiedData);
-      console.log('tunnel started data ', data);
-      openTunnelPage(data);
+      const { name, public_url: publicURL } = JSON.parse(
+        stringifiedData,
+      ) as NgrokStartTunnelResponse;
+      openTunnelPage({ name, publicURL, auth: options.auth });
     } catch (error) {
       console.error('startTunnel error', error);
     }
