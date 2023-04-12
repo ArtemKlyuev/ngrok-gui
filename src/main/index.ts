@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, ipcMain } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain, shell } from 'electron';
 
 import fixPath from 'fix-path';
 
@@ -58,6 +58,14 @@ const createWindow = async (): Promise<void> => {
   });
 
   const ngrokPath = await getNgrokPath();
+
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    if (url.startsWith('https') || url.startsWith('http')) {
+      shell.openExternal(url);
+    }
+
+    return { action: 'deny' };
+  });
 
   mainWindow.webContents.send(APP_EVENTS.IPC.SHELL_NGROK_PATH, ngrokPath);
 
