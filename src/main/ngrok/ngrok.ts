@@ -81,8 +81,8 @@ export class Ngrok {
   }
 
   static async stopTunnel(name: string) {
-    this.#api?.stopTunnel(name);
-    this.#process?.killProcess();
+    await this.#api?.stopTunnel(name);
+    await this.#process?.killProcess();
 
     this.#api = null;
     this.#process = null;
