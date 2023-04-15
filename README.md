@@ -9,3 +9,4 @@ TODO:
   - system
   - inside app
 - save app config (https://github.com/electron/electron/issues/526)
+- show binary info
