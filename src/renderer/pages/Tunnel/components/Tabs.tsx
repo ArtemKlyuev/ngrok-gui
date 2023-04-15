@@ -1,6 +1,8 @@
 import { useTabs, Tabs, QRCode } from '../../../components';
 
+import { AuthValue } from './AuthValue';
 import { TunnelCard } from './Card';
+import { Collapse } from './Collapse';
 
 const TABS = ['With auth', 'Without auth'] as const;
 
@@ -71,59 +73,10 @@ export const TunnelTabs = ({
                   Open in browser
                 </TunnelCard.Action>
               </TunnelCard.Actions>
-              <div className="collapse">
-                <input type="checkbox" className="peer" />
-                <div className="collapse-title link pl-0 pr-0">Show credentials</div>
-                <div className="collapse-content text-primary-content">
-                  <div className="form-control gap-4">
-                    <div className="input-group">
-                      <input
-                        type="text"
-                        disabled
-                        defaultValue={auth.login}
-                        className="input input-sm input-bordered"
-                      />
-                      <button className="btn btn-sm btn-square btn-active btn-ghost">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-4 w-4"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                    <div className="input-group">
-                      <input
-                        type="password"
-                        disabled
-                        defaultValue={auth.password}
-                        className="input input-sm input-bordered"
-                      />
-                      <button className="btn btn-sm btn-square btn-active btn-ghost">
-                        <svg
-                          aria-hidden="true"
-                          focusable="false"
-                          role="img"
-                          className="h-4 w-4"
-                          viewBox="0 0 16 16"
-                          fill="currentColor"
-                        >
-                          <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path>
-                          <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <Collapse title="Show credentials">
+                <AuthValue value={auth.login} />
+                <AuthValue value={auth.password} hideValue />
+              </Collapse>
             </TunnelCard.Body>
           </TunnelCard>
         </Tabs.Panel>
