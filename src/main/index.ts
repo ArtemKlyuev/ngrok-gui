@@ -67,6 +67,8 @@ const windowSize = IS_DEV
       height: 800,
     };
 
+let window: BrowserWindow | null = null;
+
 const createWindow = async (): Promise<void> => {
   const mainWindow = new BrowserWindow({
     ...windowSize,
@@ -74,6 +76,10 @@ const createWindow = async (): Promise<void> => {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
     },
   });
+
+  window = mainWindow;
+
+  mainWindow.isMaximized;
 
   const ngrokPath = await getNgrokPath();
 
@@ -90,6 +96,15 @@ const createWindow = async (): Promise<void> => {
   // Load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
+  mainWindow.on('close', function (event) {
+    if (!app.quitting) {
+      event.preventDefault();
+      mainWindow.hide();
+    }
+
+    return false;
+  });
+
   if (IS_DEV) {
     mainWindow.webContents.openDevTools();
   }
@@ -103,12 +118,21 @@ app.whenReady().then(() => {
   createWindow();
 
   app.on('activate', () => {
+    if (window) {
+      window.restore();
+      window.focus();
+    }
+
     // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();
     }
   });
+});
+
+app.on('before-quit', () => {
+  app.quitting = true;
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
