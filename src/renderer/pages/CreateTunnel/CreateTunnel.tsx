@@ -206,7 +206,7 @@ export const CreateTunnel = (): React.ReactElement => {
         <fieldset>
           <legend className="text-2xl font-bold mb-4">Config</legend>
           <div className="grid gap-[0.25rem]">
-            <label className="label-text">Name:</label>
+            <label className="label-text">Name*</label>
             <input
               type="text"
               {...register(FIELDS.NAME)}
@@ -215,7 +215,7 @@ export const CreateTunnel = (): React.ReactElement => {
             {errors.name && <FieldError>{errors.name.message}</FieldError>}
           </div>
           <div className="grid gap-[0.25rem]">
-            <label className="label-text">Port:</label>
+            <label className="label-text">Port*</label>
             <input
               type="text"
               {...register(FIELDS.PORT)}
@@ -230,7 +230,7 @@ export const CreateTunnel = (): React.ReactElement => {
           {shouldUseAuth && (
             <>
               <div className="grid gap-[0.25rem]">
-                <label className="label-text">Login</label>
+                <label className="label-text">Login*</label>
                 <input
                   type="text"
                   {...register(FIELDS.LOGIN)}
@@ -239,7 +239,7 @@ export const CreateTunnel = (): React.ReactElement => {
                 {errors.login && <FieldError>{errors.login.message}</FieldError>}
               </div>
               <div className="grid gap-[0.25rem]">
-                <label className="label-text">Password</label>
+                <label className="label-text">Password*</label>
                 <input
                   type="password"
                   {...register(FIELDS.PASSWORD, {
