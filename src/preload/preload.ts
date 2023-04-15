@@ -1,23 +1,11 @@
 // See the Electron documentation for details on how to use preload scripts:
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 import { contextBridge, ipcRenderer } from 'electron';
-import { Ngrok } from 'ngrok';
 
 import { APP_EVENTS } from '../constants/events';
 import { RENDERER } from '../constants/common';
 
 declare global {
-  interface NgrokOptions {
-    name: string;
-    proto: Ngrok.Protocol;
-    port: number;
-    binPath: string;
-    auth?: {
-      login: string;
-      password: string;
-    };
-  }
-
   interface Window {
     [RENDERER.EXPOSED_API.NAME]?: typeof EXPOSED_API;
   }
