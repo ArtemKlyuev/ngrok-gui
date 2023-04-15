@@ -3,6 +3,7 @@ import { useTabs, Tabs, QRCode } from '../../../components';
 import { AuthValue } from './AuthValue';
 import { TunnelCard } from './Card';
 import { Collapse } from './Collapse';
+import { StandardCard } from './StandardCard';
 
 const TABS = ['With auth', 'Without auth'] as const;
 
@@ -39,23 +40,7 @@ export const TunnelTabs = ({
       </Tabs.List>
       <Tabs.Panels {...getPanelsProps()}>
         <Tabs.Panel {...getPanelProps({ id: 'With auth' })}>
-          <TunnelCard>
-            <TunnelCard.Img>
-              <QRCode text={URLWithAuth} />
-            </TunnelCard.Img>
-            <TunnelCard.Body>
-              <TunnelCard.Title>
-                Tunnel with name <span className="italic">{name}</span> started!
-              </TunnelCard.Title>
-              <p>Scan QR code to connect</p>
-              <div className="divider">OR</div>
-              <TunnelCard.Actions>
-                <TunnelCard.Action onClick={handleOpenInBrowser(URLWithAuth)}>
-                  Open in browser
-                </TunnelCard.Action>
-              </TunnelCard.Actions>
-            </TunnelCard.Body>
-          </TunnelCard>
+          <StandardCard name={name} URL={URLWithAuth} />
         </Tabs.Panel>
         <Tabs.Panel {...getPanelProps({ id: 'Without auth' })}>
           <TunnelCard>
