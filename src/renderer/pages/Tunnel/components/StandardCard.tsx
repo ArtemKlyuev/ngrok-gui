@@ -14,19 +14,21 @@ export const StandardCard = ({ name, URL }: Props) => {
 
   return (
     <TunnelCard>
-      <TunnelCard.Img>
-        <QRCode text={URL} />
-      </TunnelCard.Img>
-      <TunnelCard.Body>
-        <TunnelCard.Title>
-          Tunnel with name <span className="italic">{name}</span> started!
-        </TunnelCard.Title>
-        <p>Scan QR code to connect</p>
-        <div className="divider">OR</div>
-        <TunnelCard.Actions>
-          <TunnelCard.Action onClick={handleClick}>Open in browser</TunnelCard.Action>
-        </TunnelCard.Actions>
-      </TunnelCard.Body>
+      <TunnelCard.Bg>
+        <TunnelCard.Img>
+          <QRCode text={URL} />
+        </TunnelCard.Img>
+        <TunnelCard.Body>
+          <TunnelCard.Title>
+            Tunnel with name <span className="italic">{name}</span> started!
+          </TunnelCard.Title>
+          <p>Scan QR code to connect</p>
+          <div className="divider">OR</div>
+          <TunnelCard.Actions>
+            <TunnelCard.Action onClick={handleClick}>Open in browser</TunnelCard.Action>
+          </TunnelCard.Actions>
+        </TunnelCard.Body>
+      </TunnelCard.Bg>
     </TunnelCard>
   );
 };
