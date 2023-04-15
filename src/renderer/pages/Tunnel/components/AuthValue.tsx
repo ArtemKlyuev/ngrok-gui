@@ -57,7 +57,7 @@ export const AuthValue = ({ value, hideValue = false }: Props) => {
         onClick={handleCopy}
         className="btn btn-sm btn-square btn-active btn-ghost"
       >
-        <CopyIcon />
+        <CopyIcon className="h-4 w-4" />
       </button>
     </div>
   );
