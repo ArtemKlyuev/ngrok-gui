@@ -1,5 +1,7 @@
 import { FC } from 'react';
 
+import { Button } from '../../../components';
+
 interface Props {
   children: React.ReactNode;
 }
@@ -37,9 +39,9 @@ const Actions: FC<Props> = ({ children }) => {
 
 const Action: FC<Props & { onClick: () => void }> = ({ children, onClick }) => {
   return (
-    <button type="button" onClick={onClick} className="btn btn-primary">
+    <Button variant="primary" size="medium" onClick={onClick}>
       {children}
-    </button>
+    </Button>
   );
 };
 

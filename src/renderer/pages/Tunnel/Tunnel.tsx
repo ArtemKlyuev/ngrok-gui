@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useExposedAPI } from '../../hooks';
-import { ExternalLink } from '../../components';
+import { Button, ExternalLink } from '../../components';
 
 import { TunnelTabs, StandardCard } from './components';
 
@@ -40,9 +40,9 @@ export const Tunnel = (): React.ReactElement => {
       ) : (
         <StandardCard name={name} URL={publicURL} />
       )}
-      <button type="button" onClick={handleStopTunnel} className="btn btn-error">
+      <Button variant="error" size="medium" onClick={handleStopTunnel}>
         Stop tunnel
-      </button>
+      </Button>
     </div>
   );
 };

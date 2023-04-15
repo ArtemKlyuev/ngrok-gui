@@ -8,7 +8,7 @@ import * as z from 'zod';
 import { NgrokStartTunnelResponse } from '../../../main/ngrok/api';
 
 import { useExposedAPI } from '../../hooks';
-import { FieldError, Radio } from '../../components';
+import { Button, FieldError, Radio } from '../../components';
 
 export interface TunnelData {
   name: string;
@@ -261,9 +261,9 @@ export const CreateTunnel = (): React.ReactElement => {
             </>
           )}
         </fieldset>
-        <button type="submit" className="btn btn-sm">
+        <Button type="submit" variant="primary" size="small">
           Start tunnel
-        </button>
+        </Button>
       </form>
     </>
   );
