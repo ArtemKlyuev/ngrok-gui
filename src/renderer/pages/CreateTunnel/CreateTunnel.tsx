@@ -10,6 +10,13 @@ import { NgrokStartTunnelResponse } from '../../../main/ngrok/api';
 import { useExposedAPI } from '../../hooks';
 import { FieldError, Radio } from '../../components';
 
+export interface TunnelData {
+  name: string;
+  publicURL: string;
+  auth: NgrokOptions['auth'];
+  inspectURL: string;
+}
+
 type Inputs = {
   [FIELDS.PATH_TYPE]: typeof PREDEFINED | typeof MANUAL;
   [FIELDS.PREDEFINED_PATH]: string;
@@ -129,7 +136,7 @@ export const CreateTunnel = (): React.ReactElement => {
 
   const shouldUseAuth = watch(FIELDS.AUTH);
 
-  const openTunnelPage = (data: any): void => {
+  const openTunnelPage = (data: TunnelData): void => {
     navigate('tunnel', { state: data });
   };
 

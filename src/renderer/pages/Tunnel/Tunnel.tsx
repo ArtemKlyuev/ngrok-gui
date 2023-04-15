@@ -5,6 +5,8 @@ import { ExternalLink } from '../../components';
 
 import { TunnelTabs, StandardCard } from './components';
 
+import { TunnelData } from '../CreateTunnel';
+
 const getURLWithAuth = (url: string, auth: NonNullable<NgrokOptions['auth']>): string => {
   const { protocol, host } = new URL(url);
   const { login, password } = auth;
@@ -17,7 +19,7 @@ export const Tunnel = (): React.ReactElement => {
   const exposedAPI = useExposedAPI();
   const navigate = useNavigate();
 
-  const { name, publicURL, auth, inspectURL } = location.state;
+  const { name, publicURL, auth, inspectURL } = location.state as TunnelData;
 
   const handleStopTunnel = async (): Promise<void> => {
     await exposedAPI?.api.stopTunnel(name);
