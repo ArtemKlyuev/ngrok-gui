@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
@@ -74,6 +74,7 @@ const schema = z
 const [randomName] = crypto.randomUUID().split('-');
 
 export const CreateTunnel = (): React.ReactElement => {
+  const [isLoading, setIsLoading] = useState(false);
   const exposedAPI = useExposedAPI();
   const ngrokPath = exposedAPI?.preloaded.get('ngrokPath');
   const hasNgrokPath = Boolean(ngrokPath);
@@ -109,6 +110,7 @@ export const CreateTunnel = (): React.ReactElement => {
         public_url: publicURL,
         inspectURL,
       } = JSON.parse(stringifiedData) as NgrokStartTunnelResponse & { inspectURL: string };
+      setIsLoading(false);
       openTunnelPage({ name, publicURL, auth: options.auth, inspectURL });
     } catch (error) {
       console.error('startTunnel error', error);
@@ -116,6 +118,7 @@ export const CreateTunnel = (): React.ReactElement => {
   };
 
   const onSubmit: SubmitHandler<Inputs> = async (rawData) => {
+    setIsLoading(true);
     const { name, port, login, password } = rawData;
 
     const binPath =
@@ -261,8 +264,14 @@ export const CreateTunnel = (): React.ReactElement => {
             </>
           )}
         </fieldset>
-        <Button type="submit" variant="primary" size="small">
-          Start tunnel
+        <Button
+          type="submit"
+          variant="primary"
+          size="small"
+          loading={isLoading}
+          disabled={isLoading}
+        >
+          {isLoading ? 'Starting up a tunnel' : 'Start tunnel'}
         </Button>
       </form>
     </>
