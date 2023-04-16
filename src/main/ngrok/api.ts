@@ -1,5 +1,4 @@
 import axios, { AxiosInstance } from 'axios';
-import { Ngrok } from 'ngrok';
 
 export interface Options {
   name: string;

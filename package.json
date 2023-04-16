@@ -65,7 +65,6 @@
     "eslint": "8.38.0",
     "eslint-plugin-import": "2.27.5",
     "eslint-plugin-storybook": "0.6.11",
-    "ngrok": "4.3.3",
     "node-loader": "2.0.0",
     "postcss": "8.4.21",
     "postcss-loader": "7.2.4",
