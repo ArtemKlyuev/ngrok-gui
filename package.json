@@ -2,9 +2,9 @@
   "name": "ngrok-gui",
   "productName": "ngrok-gui",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "GUI for ngrok",
   "keywords": [],
-  "author": "artem",
+  "author": "Artem Klyuev",
   "license": "MIT",
   "main": ".webpack/main",
   "engines": {
@@ -16,7 +16,8 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
-    "release:dry-run": "release-it --dry-run",
+    "release": "release-it",
+    "release:dry-run": "release-it --dry-run -VV",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
