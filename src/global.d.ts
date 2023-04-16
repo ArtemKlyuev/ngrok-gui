@@ -1,14 +1,14 @@
-import { Ngrok } from 'ngrok';
+type NgrokProtocol = 'http' | 'tcp' | 'tls';
 
-declare global {
-  interface NgrokOptions {
-    name: string;
-    proto: Ngrok.Protocol;
-    port: number;
-    binPath: string;
-    auth?: {
-      login: string;
-      password: string;
-    };
-  }
+interface NgrokBasicAuth {
+  login: string;
+  password: string;
+}
+
+interface NgrokOptions {
+  name: string;
+  proto: NgrokProtocol;
+  port: number;
+  binPath: string;
+  auth?: NgrokBasicAuth | undefined;
 }

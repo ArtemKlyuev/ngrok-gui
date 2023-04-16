@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from 'axios';
 
 export interface Options {
   name: string;
-  proto: Ngrok.Protocol;
+  proto: NgrokProtocol;
   addr: number;
   basic_auth?: string[] | undefined;
 }
@@ -21,7 +21,7 @@ export interface NgrokStartTunnelResponse {
   /**
    * @example 'tcp'
    */
-  proto: string;
+  proto: NgrokProtocol;
   config: {
     /**
      * @example 'localhost:22'

@@ -7,7 +7,7 @@ import { TunnelTabs, StandardCard } from './components';
 
 import { TunnelData } from '../CreateTunnel';
 
-const getURLWithAuth = (url: string, auth: NonNullable<NgrokOptions['auth']>): string => {
+const getURLWithAuth = (url: string, auth: NgrokBasicAuth): string => {
   const { protocol, host } = new URL(url);
   const { login, password } = auth;
 
