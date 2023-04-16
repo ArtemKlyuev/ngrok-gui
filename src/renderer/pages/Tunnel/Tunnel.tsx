@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useExposedAPI } from '../../hooks';
@@ -15,6 +16,7 @@ const getURLWithAuth = (url: string, auth: NgrokBasicAuth): string => {
 };
 
 export const Tunnel = (): React.ReactElement => {
+  const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
   const exposedAPI = useExposedAPI();
   const navigate = useNavigate();
@@ -22,7 +24,9 @@ export const Tunnel = (): React.ReactElement => {
   const { name, publicURL, auth, inspectURL } = location.state as TunnelData;
 
   const handleStopTunnel = async (): Promise<void> => {
+    setIsLoading(true);
     await exposedAPI?.api.stopTunnel(name);
+    setIsLoading(false);
     navigate('/');
   };
 
@@ -40,8 +44,14 @@ export const Tunnel = (): React.ReactElement => {
       ) : (
         <StandardCard name={name} URL={publicURL} />
       )}
-      <Button variant="error" size="medium" onClick={handleStopTunnel}>
-        Stop tunnel
+      <Button
+        variant="error"
+        size="medium"
+        loading={isLoading}
+        disabled={isLoading}
+        onClick={handleStopTunnel}
+      >
+        {isLoading ? 'Stopping a tunnel' : 'Stop tunnel'}
       </Button>
     </div>
   );
