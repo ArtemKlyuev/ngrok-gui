@@ -47,6 +47,7 @@
     "@electron-forge/maker-zip": "6.1.1",
     "@electron-forge/plugin-webpack": "6.1.1",
     "@hookform/devtools": "4.3.1",
+    "@release-it/conventional-changelog": "5.1.1",
     "@storybook/addon-actions": "7.0.2",
     "@storybook/addon-essentials": "7.0.2",
     "@storybook/addon-interactions": "7.0.2",
