@@ -4,6 +4,7 @@ import cn from 'classnames';
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant: 'primary' | 'error';
   size: 'small' | 'medium';
+  loading?: boolean | undefined;
 }
 
 const sizeToClassName = {
@@ -16,11 +17,22 @@ const variantToClassName = {
   error: 'btn-error',
 };
 
-export const Button: FC<Props> = ({ variant, size, type = 'button', ...props }) => {
+export const Button: FC<Props> = ({
+  variant,
+  size,
+  type = 'button',
+  loading = false,
+  ...props
+}) => {
   return (
     <button
       type={type}
-      className={cn('btn', sizeToClassName[size], variantToClassName[variant])}
+      className={cn(
+        'btn',
+        sizeToClassName[size],
+        variantToClassName[variant],
+        loading && 'loading',
+      )}
       {...props}
     />
   );
