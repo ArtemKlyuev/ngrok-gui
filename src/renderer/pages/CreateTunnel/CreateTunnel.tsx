@@ -148,17 +148,17 @@ export const CreateTunnel = (): React.ReactElement => {
   return (
     <>
       {process.env.NODE_ENV === 'development' && <DevTool control={control} />}
-      <h1 className="text-3xl font-bold underline">Создание туннеля</h1>
+      <h1 className="text-3xl font-bold underline">Tunnel creation</h1>
       <br />
       <form autoComplete="off" onSubmit={handleSubmit(onSubmit)} className="grid gap-8">
         <fieldset className="form-control">
-          <legend className="text-2xl font-bold mb-4">Выбор бинарника</legend>
+          <legend className="text-2xl font-bold mb-4">Binary choice</legend>
           {hasNgrokPath ? (
             <>
               <Radio
                 {...register(FIELDS.PATH_TYPE)}
                 value={PREDEFINED}
-                label="Использовать один из найденных путей:"
+                label="Use one of the found paths:"
               />
               <ul className="pl-5">
                 {ngrokPath!.map((path) => {
@@ -176,19 +176,19 @@ export const CreateTunnel = (): React.ReactElement => {
               </ul>
             </>
           ) : (
-            'Не удалось автоматически найти исполняемый файл ngrok на вашем компьютере, выберите файл вручную'
+            'Could not automatically find the ngrok executable on your computer, please select the file manually'
           )}
           <div className="form-control">
             {hasNgrokPath && (
               <Radio
                 {...register(FIELDS.PATH_TYPE)}
                 value="manual"
-                label="Выбрать бинарник вручную"
+                label="Select binary manually"
               />
             )}
             {((hasNgrokPath && isManual) || !hasNgrokPath) && (
               <div className="grid gap-[0.25rem]">
-                <label className="label-text">Путь до бинарника</label>
+                <label className="label-text">Binary's path</label>
                 <div className="input-group">
                   <input
                     type="text"
