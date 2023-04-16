@@ -1,7 +1,7 @@
 {
   "name": "ngrok-gui",
   "productName": "ngrok-gui",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "GUI for ngrok",
   "keywords": [],
   "author": "Artem Klyuev",
