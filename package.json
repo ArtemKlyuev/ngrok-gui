@@ -16,6 +16,7 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
+    "release:dry-run": "release-it --dry-run",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
@@ -70,6 +71,7 @@
     "postcss-loader": "7.2.4",
     "prettier": "2.8.7",
     "prop-types": "15.8.1",
+    "release-it": "15.10.1",
     "storybook": "7.0.2",
     "storybook-addon-react-router-v6": "0.3.5",
     "style-loader": "3.3.2",
