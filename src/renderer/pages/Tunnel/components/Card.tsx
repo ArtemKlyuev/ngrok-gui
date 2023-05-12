@@ -34,7 +34,7 @@ const Title: FC<Props> = ({ children }) => {
 };
 
 const Actions: FC<Props> = ({ children }) => {
-  return <div className="card-actions justify-end">{children}</div>;
+  return <div className="w-full">{children}</div>;
 };
 
 const Action: FC<Props & { onClick: () => void }> = ({ children, onClick }) => {

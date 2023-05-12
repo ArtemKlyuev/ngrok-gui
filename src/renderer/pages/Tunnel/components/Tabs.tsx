@@ -1,3 +1,5 @@
+import { useCopyToClipboard } from '../../../hooks';
+import { CopyIcon } from '../../../icons';
 import { useTabs, Tabs, QRCode } from '../../../components';
 
 import { AuthValue } from './AuthValue';
@@ -24,10 +26,13 @@ export const TunnelTabs = ({
     tabsIDs: TABS,
     defaultSelectedTab: 'With auth',
   });
+  const { isCopied, copyToClipboard } = useCopyToClipboard();
 
   const handleOpenInBrowser = (URL: string) => (): void => {
     window.open(URL);
   };
+
+  const handleCopy = (): Promise<void> => copyToClipboard(URLWithoutAuth);
 
   return (
     <Tabs>
@@ -54,9 +59,21 @@ export const TunnelTabs = ({
               <p>Scan QR code to connect</p>
               <div className="divider">OR</div>
               <TunnelCard.Actions>
-                <TunnelCard.Action onClick={handleOpenInBrowser(URLWithoutAuth)}>
-                  Open in browser
-                </TunnelCard.Action>
+                <div className="grid grid-cols-[0.5fr_0.5fr] gap-[3%]">
+                  <TunnelCard.Action onClick={handleOpenInBrowser(URLWithoutAuth)}>
+                    Open in browser
+                  </TunnelCard.Action>
+                  <TunnelCard.Action onClick={handleCopy}>
+                    {isCopied ? (
+                      'Copied!'
+                    ) : (
+                      <>
+                        Copy URL
+                        <CopyIcon className="h-[14px] ml-2"></CopyIcon>
+                      </>
+                    )}
+                  </TunnelCard.Action>
+                </div>
               </TunnelCard.Actions>
               <Collapse title="Show credentials">
                 <AuthValue value={auth.login} />
