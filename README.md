@@ -4,7 +4,7 @@ Unofficial [`ngrok`](https://ngrok.com/) GUI client for `macOs`(tested on `ARM` 
 
 > This project is for my personal needs, but if you are interested, feel free to use it for non-commercial purposes.
 
-![Start tunnel page](/docs/start_tunnel.png 'Start tunnel')
+![Start tunnel page](/docs/start_tunnel.jpeg 'Start tunnel')
 
 ## Features
 
@@ -16,7 +16,7 @@ Unofficial [`ngrok`](https://ngrok.com/) GUI client for `macOs`(tested on `ARM` 
 The ability to start a `http` tunnel with or without basic auth. You can choose `ngrok`
 binary installed in `PATH` or provide custom path.
 
-![Start tunnel page](/docs/start_tunnel.png 'Start tunnel')
+![Start tunnel page](/docs/start_tunnel.jpeg 'Start tunnel')
 
 ### Tunnel page
 
